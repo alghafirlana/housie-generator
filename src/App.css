@@ -1,0 +1,105 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: auto;
+
+    transform: scale(1.2);
+    transform-origin: center center;
+    background: linear-gradient(
+        180deg,
+        #fff1e4 0%,
+        #fff8f1 50%,
+        #ffffff 100%
+    ); 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+}
+
+.bigNumberDisplay {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+   
+}
+
+.bigNumberDisplay h4{
+    font-size: 30px;
+    margin: 0 auto;
+}
+
+.san-tts{
+
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: -50px;
+    margin-top: 2px;
+}
+.displayed-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; 
+    margin-top: -15px;
+}
+
+.btnReset,
+.btnGenerate {
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 35px;
+
+}
+
+.btn-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: -25px;
+}
+
+.line-seperator{
+    width: 90%; 
+    height: 1px;
+    margin: -10px auto 20px;
+    background-color: lightgrey
+}
+
+.numberTable{
+    display: grid;
+    grid-template-columns: repeat(3, 90px);
+    grid-template-rows: repeat(10, 30px);
+    background-color: white;
+    gap: 2px;
+    border: 2px solid #d8d8d8;
+   
+    column-gap: 8px;
+    row-gap: 6px; 
+
+    padding: 15px;
+    background: transparent;
+    border-radius: 15px;
+    margin-top: 10px;
+
+}
+
+.cell{
+    border: 1px solid black;
+    background-color: white;
+    box-sizing: border-box;
+    display: flex;
+    border-radius: 12px;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 20px;
+}
+
