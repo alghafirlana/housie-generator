@@ -227,7 +227,7 @@ let random = generateRandom();
     {showInstructions && (
     <div className="popup-instructions">
     <button className='instructionXBtn'onClick={closeInstructions}>
-      X
+      X 
     </button>
     <h2>INSTRUCTIONS</h2>
     <div className='instruct-line-seperator'></div>
