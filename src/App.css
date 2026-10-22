@@ -1,13 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 .container{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    justify-content: flex-start;
     margin: auto;
+    box-sizing: border-box;
+    margin-top: -10px;
 
-    transform: scale(1.2);
-    transform-origin: center center;
+
+    transform: scale(1.17);
+    transform-origin: top center;
     background: linear-gradient(
         180deg,
         #fff1e4 0%,
@@ -19,34 +22,55 @@
 
 }
 
+.container.scale-out{
+    transform: scale(1.17);
+    min-height: auto;
+   display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto;
+    box-sizing: border-box;
+    margin-top: -10px;
+
+}
+.container h2{
+
+    font-family: 'Poppins', sans-serif;
+}
+
 .bigNumberDisplay {
     display: flex;
     align-items: center;
     gap: 15px;
     justify-content: center;
-   
+    font-family: 'Poppin', sans-serif;
+    margin-top: -18px;
 }
 
 .bigNumberDisplay h4{
-    font-size: 30px;
+    font-size: 24px;
     margin: 0 auto;
 }
 
 .san-tts{
 
+    font-size: 14px;
+    margin: 0;
+    margin-right: -50px;
     background: transparent;
     border: none;
-    font-size: 16px;
     cursor: pointer;
-    margin-right: -50px;
-    margin-top: 2px;
 }
 .displayed-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px; 
-    margin-top: -15px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    position: relative;
+    z-index: 2;
+
 }
 
 .btnReset,
@@ -56,21 +80,42 @@
     cursor: pointer;
     margin-top: 35px;
 
+    padding: 3px 6px;
+    line-height: 1;
+    vertical-align: middle;
 }
+
+
 
 .btn-container{
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
-    margin-top: -25px;
+    margin-top: -40px;
 }
 
 .line-seperator{
-    width: 90%; 
+    width: 40%; 
     height: 1px;
     margin: -10px auto 20px;
-    background-color: lightgrey
+    background: linear-gradient(
+        to right,
+        #eeeeee 0%,
+        #bcbcbc 50%,
+        #eeeeee 100%
+    );
+}
+.instruct-line-seperator{
+    width: 40%; 
+    height: 1px;
+    margin: -40px auto 20px;    
+    background: linear-gradient(
+        to right,
+        #eeeeee 0%,
+        #bcbcbc 50%,
+        #eeeeee 100%
+    );
 }
 
 .numberTable{
@@ -100,6 +145,123 @@
     justify-content: center;
     align-items: center;
     color: black;
-    font-size: 20px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
 }
 
+.san-generator{
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -20px;
+}
+
+.san-generator h2{
+    margin: 10px 0;
+    font-size: 15px;
+}
+.popup-instructions{
+ position: fixed;
+ top:50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ 
+ width: min(400px, calc(100vw - 28px));
+ background: #fff8f1;
+ color: black;
+  border-radius: 16px;
+  border: 2px solid lightgray;
+  z-index: 1000;
+  padding: 30px 0px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+ 
+}
+
+.popup-instructions h2{
+    text-align: center;
+    transform: translateY(-25px);
+}
+
+.instructions-list{
+    width: fit-content;
+    max-width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: left;
+    margin-top: 5px;
+}
+
+.instructions-list p{
+    margin: 15px 0; 
+    font-size: 14px;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    transform: translateY(-3px);
+}
+
+.popup{
+    border: 2px solid lightgray;
+    padding: 20px 6px;
+    border-radius: 15px;
+    background-color: #fff8f1;
+    transform: translateY(15px);
+}
+
+.popup h2{
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+}
+
+.instructionXBtn{
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: transparent;
+    color: black;
+    cursor: pointer;
+    z-index: 10000;
+}
+.completeXBtn{
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: transparent;
+    color: black;
+    cursor: pointer;
+}
+
+.popup p{
+    font-size: 12px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    transform: translateY(-10px);
+    
+}
+.nav-top{
+    position: relative;
+}
+
+.homeBtn{
+    position: absolute;
+    left: -100px;
+    transform: translateY(-50%);
+    top: 58.5%;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+}
+
+.show-instructions{
+    position: absolute;
+    right: -100px;
+    transform: translateY(-50%);
+    top: 58.5%;
+    margin: 0;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+}

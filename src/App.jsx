@@ -1,111 +1,62 @@
-import { useState } from 'react';
 import './App.css'
+import words from './housie.json'
+import { House, CircleHelp} from 'lucide-react';
+import { useGameLogic } from './hooks/useGameLogic';
 
 function App() {
-
-  const grid = {
-    columns: 3, 
-    rows: 10
-  }
-
-  const [currentNumber, setCurrentNumber] = useState(0);
-  const [selectedNumbers, setSelectedNumbers] = useState([]);
-  const [isSanEnabled, setIsSanEnabled] = useState(true);
-
-  const generateRandom =() => {
-    const min = 1;
-    const max = 28;
-  
-
-  const random = Math.floor(
-    Math.random() * (max - min +1)
-  ) + min
-
-  return random;
-
-};
-
- const generateNextRandom = () => {
-    if (selectedNumbers.length >= 28) {
-      alert("All Numbers Filled");
-       return null;
-    }
-  
-let random = generateRandom();
-
-    while (selectedNumbers.includes(random)){
-      random = generateRandom();
-    }
-    
-    setSelectedNumbers(prev=> [...prev, random]);
-    return random;
-  };
-
-    const getDisplayNumber = (number) => {
-
-    if (number === 21) return 30; 
-    if (number === 22) return 40; 
-    if (number === 23) return 50; 
-    if (number === 24) return 60; 
-    if (number === 25) return 70;
-    if (number === 26) return 80;
-    if (number === 27) return 90;
-    if (number === 28) return 100;
-
-    return number;
-  }
-
-  const handleGenerate = () => {
-      const random = generateNextRandom();
-
-      if (random === null) return; 
-
-      const displayNumber = getDisplayNumber(random);
-
-      setCurrentNumber(getDisplayNumber(random));
-      playAudio(displayNumber)
-  }
-
-  const handleRestart = () => {
-     setCurrentNumber(0);
-     setSelectedNumbers([]);
-     
-  }
-
-  const toggleSan = () => {
-  setIsSanEnabled(prev => !prev);
-};
-
-  const playAudio = (number) => {
-    if(!isSanEnabled) return;
-    const audio = document.getElementById(`audio-${number}`);
-
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play().catch(console.error)
-    }
-  }
+  const{
+      grid,
+    currentNumber,
+    selectedNumbers,
+    isSanEnabled,
+    showComplete,
+    showInstructions,
+    popRef,
+    getDisplayNumber,
+    getSanskritWord,
+    playAudio,
+    toggleSan,
+    handleGenerate,
+    handleRestart,
+    instruction,
+    closeInstructions,
+    closeIsComplete
+  } =useGameLogic();
 
   return (
     <>
-    <div className="container">
+    <div className={`container ${showComplete ? 'scale-out' : ''}`}>
 
-    <div>
-        <h2>Housie Number Generator</h2>
+    <div className='nav-top'>
+       <h2>🔢 Housie Number Generator</h2>
+       <button className ='homeBtn' onClick={()=> window.location.href='https://zat.am/'} aria-label="homeBtn">
+        <House size={20} color="black" />
+       </button>
+       <button className ='show-instructions' onClick={instruction} aria-label="show-instructions">
+        <CircleHelp size={20} color="black" />
+        </button>
+      </div>
        <div className='line-seperator'></div>
-
-    </div>
 
   <div className='displayed-btn'>
      <div className="bigNumberDisplay">
         <h4>{currentNumber}</h4>
-            <button className={`san-tts ${isSanEnabled ? 'listening' : ''}`}
+            <button 
+            className="san-tts"
             onClick={toggleSan}
-            aria-label={isSanEnabled ? 'Disable sanskrit tts' : 'Enable sanskrit tts'}>
+            type="button"
+            >
             {isSanEnabled ? '🔈' : '🔇'}
           </button>
     </div>
     </div>
+
+   {currentNumber !== 0 && (
+   <div className='san-generator'>
+   <h2>{getSanskritWord(currentNumber)}</h2>
+    </div>
+  )}
+
 
 
 <div>
@@ -149,6 +100,34 @@ let random = generateRandom();
   })}
 </div>
 
+    {showInstructions && (
+    <div className="popup-instructions">
+    <button className='instructionXBtn'onClick={closeInstructions}>
+      X 
+    </button>
+    <h2>INSTRUCTIONS</h2>
+    <div className='instruct-line-seperator'></div>
+    <div className='instructions-list'>
+    <p>The computer will Generate a number 🎲</p>
+    <p>Generated Numbers are marked on the grid 🔢 </p>
+    <p>Toggle the audio to hear Sanskrit 🔊</p>
+    <p>Fill up the Housie Board 📋</p>
+    <p>Click Reset to try again 🔄</p>
+    </div>
+    </div>
+   )}
+
+
+  {showComplete && (
+  <div className='popup' ref={popRef}>
+    <button className='completeXBtn'onClick={closeIsComplete}>
+      X
+    </button>
+    <h2>⭐ All Numbers Filled ⭐</h2>
+    <p> Click Reset to try again</p>
+  </div>
+  )}
+
 <div className='audioFiles'>
 
   {[
@@ -158,7 +137,7 @@ let random = generateRandom();
   <audio
   key={number}
   id={`audio-${number}`}
-  preload="auto" 
+  preload="none" 
   >
 
     <source src={`/audio/${number}.mp3`}
@@ -169,8 +148,10 @@ let random = generateRandom();
   </div>
   </div>
  </div>
+ 
+
  </>
  );
 }
 
-export default App
+export default App;
