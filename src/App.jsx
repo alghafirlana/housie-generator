@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css'
+import words from './housie.json'
+import { House, CircleHelp} from 'lucide-react';
 
 function App() {
 
@@ -11,6 +13,19 @@ function App() {
   const [currentNumber, setCurrentNumber] = useState(0);
   const [selectedNumbers, setSelectedNumbers] = useState([]);
   const [isSanEnabled, setIsSanEnabled] = useState(true);
+  const [showComplete, setIsComplete] = useState(false);
+  const [showInstructions, setshowInstructions] = useState(false);
+  const housieListSa = words.housieListSa
+  const popRef = useRef(null);
+
+  useEffect(() => {
+     if(showComplete){
+      popRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+     }
+  }, [showComplete]);
 
   const generateRandom =() => {
     const min = 1;
@@ -27,9 +42,10 @@ function App() {
 
  const generateNextRandom = () => {
     if (selectedNumbers.length >= 28) {
-      alert("All Numbers Filled");
-       return null;
+      completion ()
+      return null;
     }
+
   
 let random = generateRandom();
 
@@ -38,6 +54,9 @@ let random = generateRandom();
     }
     
     setSelectedNumbers(prev=> [...prev, random]);
+    if (selectedNumbers.length === 27){
+      setIsComplete(true);
+    }
     return random;
   };
 
@@ -69,12 +88,38 @@ let random = generateRandom();
   const handleRestart = () => {
      setCurrentNumber(0);
      setSelectedNumbers([]);
-     
+     setIsComplete(false);
   }
 
+  const getSanskritWord = (number) => {
+    if (number >= 1 && number <= 20) {
+      return housieListSa[number -1];
+    }
+
+    const indexMap = {
+      30: 20, 
+      40: 21,
+      50: 22,
+      60: 23,
+      70: 24,
+      80: 25,
+      90: 26,
+      100: 27
+    };
+
+    return housieListSa[indexMap[number]] ?? '';
+  };
   const toggleSan = () => {
-  setIsSanEnabled(prev => !prev);
-};
+      console.log("Button clicked!", isSanEnabled);
+
+  if (isSanEnabled) {
+    document.querySelectorAll('audio').forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+   }
+   setIsSanEnabled(prev => !prev);
+  }
 
   const playAudio = (number) => {
     if(!isSanEnabled) return;
@@ -86,26 +131,56 @@ let random = generateRandom();
     }
   }
 
+    const instruction =  () => {
+    setshowInstructions(true);
+    }
+  
+    const closeInstructions = () => {
+    setshowInstructions(false);
+    };
+
+    const completion = () => {
+    setIsComplete(true);
+    }    
+
+    const closeIsComplete = () => {
+    setIsComplete(false);
+    } 
+
   return (
     <>
-    <div className="container">
+    <div className={`container ${showComplete ? 'scale-out' : ''} `}>
 
-    <div>
-        <h2>Housie Number Generator</h2>
+    <div className='nav-top'>
+       <h2>🔢 Housie Number Generator</h2>
+       <button className ='homeBtn' onClick={()=> window.location.href='https://zat.am/'} aria-label="homeBtn">
+        <House size={20} color="black" />
+       </button>
+       <button className ='show-instructions' onClick={instruction} aria-label="show-instructions">
+        <CircleHelp size={20} color="black" />
+        </button>
+      </div>
        <div className='line-seperator'></div>
-
-    </div>
 
   <div className='displayed-btn'>
      <div className="bigNumberDisplay">
         <h4>{currentNumber}</h4>
-            <button className={`san-tts ${isSanEnabled ? 'listening' : ''}`}
+            <button 
+            className="san-tts"
             onClick={toggleSan}
-            aria-label={isSanEnabled ? 'Disable sanskrit tts' : 'Enable sanskrit tts'}>
+            type="button"
+            >
             {isSanEnabled ? '🔈' : '🔇'}
           </button>
     </div>
     </div>
+
+   {currentNumber !== 0 && (
+   <div className='san-generator'>
+   <h2>{getSanskritWord(currentNumber)}</h2>
+    </div>
+  )}
+
 
 
 <div>
@@ -149,6 +224,34 @@ let random = generateRandom();
   })}
 </div>
 
+    {showInstructions && (
+    <div className="popup-instructions">
+    <button className='instructionXBtn'onClick={closeInstructions}>
+      X
+    </button>
+    <h2>INSTRUCTIONS</h2>
+    <div className='instruct-line-seperator'></div>
+    <div className='instructions-list'>
+    <p>The computer will Generate a number 🎲</p>
+    <p>Generated Numbers are marked on the grid 🔢 </p>
+    <p>Toggle the audio to hear Sanskrit 🔊</p>
+    <p>Fill up the Housie Board 📋</p>
+    <p>Click Reset to try again 🔄</p>
+    </div>
+    </div>
+   )}
+
+
+  {showComplete && (
+  <div className='popup' ref={popRef}>
+    <button className='completeXBtn'onClick={closeIsComplete}>
+      X
+    </button>
+    <h2>⭐ All Numbers Filled ⭐</h2>
+    <p> Click Reset to try again</p>
+  </div>
+  )}
+
 <div className='audioFiles'>
 
   {[
@@ -158,7 +261,7 @@ let random = generateRandom();
   <audio
   key={number}
   id={`audio-${number}`}
-  preload="auto" 
+  preload="none" 
   >
 
     <source src={`/audio/${number}.mp3`}
@@ -169,6 +272,8 @@ let random = generateRandom();
   </div>
   </div>
  </div>
+ 
+
  </>
  );
 }
